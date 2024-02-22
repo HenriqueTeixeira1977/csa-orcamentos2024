@@ -12,13 +12,66 @@
     scroll-behavior: smooth;
     transition: all .3s ease;
 }
+body{
+    background-color: rgb(183, 183, 183);
+}
+header{
+    background-color: rgb(65, 219, 167);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 100px;
+    padding: 0 5%;
+}
+header .logotipo h1{
+    color: #f3f3f3;
+    font-size: 1.5rem;
+    font-weight: 300;
+    line-height: 0.5;
+}
+header .logotipo h3{
+    color: #f3f3f3;
+    font-size: 1.2rem;
+    font-weight: 300;
+}
+header nav {
+    background-color: rgba(127, 255, 212, 0);
+    display: flex;
+    justify-content: right;
+    align-items: center;
+    width: 50%;
+    height: 70px;
+}
+header nav a{
+    background-color: rgb(165, 165, 165);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 80px;
+    margin: 5px;
+    padding: 0 50px;
+    color: #f3f3f3;
+    border: #f3f3f3 solid 2px;
+    border-radius: 5px;
+    
+}
 body .container{
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
+    max-width: 70%;
     height: 100vh;
-    margin: 0;
+    margin: auto;
     text-align: center;
-    background: #000000a8
+    background: #f3f3f3
+}
+.container #dados-cliente {
+    display: block;
+    justify-content: left;
+    align-items:flex-start;
+
+    flex-wrap: wrap;
+    text-align: left;
+
 }
