@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ordem de Serviço</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://apis.google.com/js/api.js"></script>
+    <script>
+        function preencherEndereco() {
+            var cep = $('#cep').val().replace(/\D/g, '');
+            if (cep.length != 8) {
+                alert('CEP inválido');
+                return;
+            }
+            $.getJSON('https://viacep.com.br/ws/' + cep + '/json/', function (data) {
+                $('#logradouro').val(data.logradouro);
+                $('#bairro').val(data.bairro);
+                $('#cidade').val(data.localidade);
+                $('#uf').val(data.uf);
+                $('#numero').focus();
+            });
+        }
+
+        function enviarParaPlanilha() {
+            const CLIENT_ID = 'SEU_ID_DE_CLIENTE';
+            const API_KEY = 'SUA_CHAVE_DE_API';
+            const SHEET_ID = 'ID_DA_PLANILHA';
+
+            gapi.load('client', () => {
+                gapi.client.init({
+                    apiKey: API_KEY,
+                    clientId: CLIENT_ID,
+                    discoveryDocs: ['https://sheets.googleapis.com/$discovery/rest?version=v4'],
+                    scope: 'https://www.googleapis.com/auth/spreadsheets'
+                });
+
+                gapi.client.load('sheets', 'v4', () => {
+                    const data = [
+                        [$('#nome').val(), $('#email').val(), $('#telefone').val(), $('#cep').val(), $('#logradouro').val(), $('#numero').val(), $('#complemento').val(), $('#bairro').val(), $('#cidade').val(), $('#uf').val(), $('#descricao').val()]
+                    ];
+
+                    gapi.client.sheets.spreadsheets.values.append({
+                        spreadsheetId: SHEET_ID,
+                        range: 'A1', // Pode ser ajustado conforme necessário
+                        valueInputOption: 'RAW',
+                        resource: { values: data }
+                    }).then((response) => {
+                        console.log('Dados enviados para a planilha:', response);
+                    }, (reason) => {
+                        console.error('Erro ao enviar dados para a planilha:', reason.result.error.message);
+                    });
+                });
+            });
+        }
+    </script>
+</head>
+<body>
+    <h2>Formulário de Orçamento</h2>
+    <form>
+        <label for="nome">Nome:</label><br>
+        <input type="text" id="nome" name="nome"><br><br>
+        <label for="email">Email:</label><br>
+        <input type="email" id="email" name="email"><br><br>
+        <label for="telefone">Telefone:</label><br>
+        <input type="text" id="telefone" name="telefone"><br><br>
+        <label for="cep">CEP:</label><br>
+        <input type="text" id="cep" name="cep" onblur="preencherEndereco()"><br><br>
+        <label for="logradouro">Logradouro:</label><br>
+        <input type="text" id="logradouro" name="logradouro"><br><br>
+        <label for="numero">Número:</label><br>
+        <input type="text" id="numero" name="numero"><br><br>
+        <label for="complemento">Complemento:</label><br>
+        <input type="text" id="complemento" name="complemento"><br><br>
+        <label for="bairro">Bairro:</label><br>
+        <input type="text" id="bairro" name="bairro"><br><br>
+        <label for="cidade">Cidade:</label><br>
+        <input type="text" id="cidade" name="cidade"><br><br>
+        <label for="uf">UF:</label><br>
+        <input type="text" id="uf" name="uf" maxlength="2"><br><br>
+        <label for="descricao">Descrição do problema:</label><br>
+        <textarea id="descricao" name="descricao"></textarea><br><br>
+        <input type="button" value="Enviar" onclick="enviarParaPlanilha()">
+    </form>
+    <p>
+        Serão utilizadas apenas peças novas (originais ou equivalentes) ou recondicionadas, dependendo da escolha do cliente. 
+        Sendo que todas as peças disponibilizadas para o cliente estarão de acordo com as especificações técnicas do fabricante (Art. 21 do CDC).
+    </p>
+    <p>
+        Pré Orçamento: R$ 488,42      Valor Faturado:____________     Forma de pagamento: ________
+        (X) Na Retirada
+        Prazo para retirada: 15 dias, sendo prorrogável em caso de falta de peça de reposição ou equivalente. Sendo que nesse caso o cliente será notificado. 
+    </p>Entrada:__________________</p>
+    <p>Retirada:__________________</p>
+    <p>
+        Ajude-nos na busca pela excelência em atendimento:  www.ConsertaSmart.com/ouvidoria
+    </p>
+    <div class="garantia">
+        <p>
+            Garantia de 90 dias. A garantia abrange somente o serviço executado e as peças substituídas. Outros defeitos e outras peças não descritos nesta Ordem de Serviço não são cobertos pela garantia.
+            Por se tratar de um equipamento eletrônico miniaturizado e integrado, o defeito apresentado poderá provocar danos em outros componentes. Neste caso a Conserta Smart estará isenta de qualquer responsabilidade sobre danos ou defeitos causados ao aparelho após sua abertura.
+            A Conserta Smart não se responsabiliza por perda de dados do aparelho.Aconselhamos que seja feito um backup.
+            Privacidade: A Conserta Smart mantém sigilo e confidencialidade de todas as informações disponíveis em seu equipamento. A senha do aparelho somente será solicitada se necessário para o conserto. 
+            Caso o aparelho não seja retirado no prazo de 90 dias , a contar da data prevista na ordem de serviço, possibilitará a venda do aparelho a terceiros, ou a desmontagem do aparelho para a venda das peças, com a devolução ao cliente mediante comprovação do valor correspondente à diferença do valor da venda e o valor do reparo. 
+            A garantia não cobre defeitos ocasionados por líquidos, mau-uso ou quedas. Lcd ou Touch Quebrados não são cobertos pela garantia. Solda de botões e conectores de carga não possuem garantia em caso de mau-uso.  
+            Aparelhos à prova d'água perdem vedação de fábrica. 
+            Aparelhos com garantia de Fabricante poderão perder sua garantia na abertura. 
+            A garantia não cobre defeitos ocasionados por software (instalação de aplicativos, vírus ou arquivos corrompidos). 
+            Processos de desoxidação e reparo de placa (Recuperação de aparelhos molhados) não possuem garantia. Garantia válida com a apresentação desta OS.
+            Atenção: Caso o aparelho nao seja retirado após 15 dias do serviço realizado, será cobrada uma taxa diária de R$ 4,90, em contrapartida a guarda e seguro do aparelho na loja. DA LEI GERAL DE PROTEÇÃO DE DADOS (LGPD):O(a) CLIENTE autoriza a coleta de dados pessoais imprescindíveis à execução desta ordem de serviço, tendo sido informado quanto ao tratamento de dados que será realizado pela PRESTADORA, nos termos da Lei n° 13.709/2018. 
+            Os dados a serem coletados serão nome completo, números de documentos de identificação (RG e CPF), endereço e e-mail. Os referidos dados serão tratados para fins de garantir a fiel execução dos serviços executados, seja para garantia, cobrança e comunicação com o cliente acerca dos serviços executados, conforme artigo 7º da LGPD. 
+            O(a) CLIENTE autoriza o compartilhamento de seus dados, com a empresa Franqueadora da contratada, para fins de estatísticas, controles de qualidade e controles de execução dos serviços contratados pelos clientes. Os dados coletados com o consentimento do(a) CLIENTE serão armazenados com segurança pelo período de até 05 anos, e poderão ser excluídos da base de dados da empresa, mediante a solicitação expressa do CLIENTE. | Assinatura do Cliente: ________________________.
+        </p>
+    </div>
+    <div class="termos">
+        <p>
+            TERMO DE CIÊNCIA E CONCORD NCIA - Ordem de serviço: 2402211118
+            Eu, EMANUEL CPF:_____________, declaro ter pleno conhecimento sobre os riscos e benefícios ao submeter o aparelho XIAOMI REDMI NOTE 8, ao procedimento de reparo de SUBSTITUIÇÃO DE DISPLAY FRONTAL COMPLETO, estou ciente dos seguintes riscos:
+            
+            <p>(X) RISCO DE SOLDA E RESSOLDA: O procedimento de solda e ressolda consiste em uma aplicação de alta temperatura na placa (400ºC) podendo eliminar o problema especificado, no entanto, este nível de temperatura, pode ocasionar danos a placa do aparelho. Procedimentos que envolvem solda e ressolda: Ressolda geral da placa: procedimento bem comum em casos de oxidação, onde todos os componentes da placa
+            são aquecidos; Troca ou ressolda de componentes da placa ou ressolda (CI, conectores, capacitores, bobinas, transistores, Cristal oscilador, diodos, antenas e qualquer periférico que esteja soldado a placa).
+            </p>
+            <p>
+            (X) RISCO DE ABERTURA: Devido às características de fabricação há a necessidade da remoção do display completo (Touchscreen+LCD) para efetuar a manutenção. Neste procedimento, existe o risco de danificar o display completamente. Procedimentos que necessitam da abertura do aparelho: Troca de periféricos (câmeras, flex, sub placas, tela e botões); Troca de placa principal; Solda ou ressolda (CI, conectores, capacitores, bobinas, transistores, Cristal oscilador, diodos, antenas e qualquer periférico que esteja soldado a placa); Procedimento de desoxidação.
+            </p>
+            <p>
+            (X) RISCO DE SOFTWARE: A instalação ou restauração do sistema operacional utilizado no aparelho em casos raros poderá ocasionar o travamento completo do sistema. Casos em que é necessário a restauração ou instalação de software: Aparelho travado no logo da marca ou operadora; Aparelho não inicia o sistema; Aparelho não desce a barra de
+            notificações; Aparelho não reproduz nenhum tipo de mídia; Aparelho sem sinal; Aparelho não reconhece sim card ou micro SD; Armazenamento cheio ou lentidão; Aparelho apresentando a seguinte mensagem: “ O app parou de funcionar” Aparelho reiniciando; Aparelho não abre os aplicativos; Cliente esqueceu a senha de desbloqueio; Quando o
+            aparelho entra em estado “INATIVO”, mais comum em iPhone.</p>
+            <p>
+            (X) RISCO DE PERDA DE DADOS: Em casos que a restauração ou instalação do sistema operacional seja necessário todos os dados de armazenamento serão apagados caso não tenha sido efetuado um backup antes de dar entrada na Assistência Técnica. Casos em que é necessário a restauração ou instalação de software: Aparelho travado no logo da marca ou operadora; Aparelho não inicia o sistema; Aparelho não desce a barra de notificações; Aparelho não reproduz nenhum tipo de mídia; Aparelho sem sinal; Aparelho não reconhece sim card ou micro SD; Armazenamento cheio ou lentidão; Aparelho apresentando a seguinte mensagem: “O app parou de funcionar”; Aparelho reiniciando; Aparelho não abre os aplicativos; Cliente esqueceu a senha de desbloqueio; Quando o aparelho entra em estado “INATIVO”, bem comum em iPhones.</p>
+            <p>
+            (X) RISCO DE DESOXIDAÇÃO: O procedimento de desoxidação consiste em realizar uma limpeza profunda da placa em uma banheira ultrassônica com álcool isopropílico. Esse tipo de procedimento pode causar danos à placa, devido a fragilidade dos componentes expostos ao líquido. Casos em que é necessário a desoxidação: Aparelho que não é à prova d’água e que teve contato com qualquer tipo de líquido.</p>
+            <p>
+            (X) RISCO DE ABERTURA EM APARELHOS A PROVA D’AGUA: Esses aparelhos, perdem totalmente a vedação após serem abertos, sendo assim, perde a resistência à água. Procedimentos que necessitam da abertura do aparelho: Troca de periféricos (câmeras, flex, sub placas, tela e botões); Troca de placa principal; Solda e ressolda (CI, conectores, capacitores, bobinas, transistores, Cristal oscilador, diodos, antenas e qualquer periférico que esteja soldado a placa); Procedimento de desoxidação.</p>
+            <p>
+            (X) RISCO DE ABERTURA DE APARELHOS COM TAMPA TRASEIRA DE VIDRO: Durante o processo de abertura a tampa de vidro pode sofrer danos, sendo necessário a troca da mesma. Procedimentos que necessitam a abertura do aparelho: Troca de periféricos (câmeras, flex, sub placas, tela e botões); Troca de placa principal; Solda ou ressolda (CI, conectores, capacitores, bobinas, transistores, Cristal oscilador, diodos, antenas e qualquer periférico que esteja soldado a placa); Procedimento de desoxidação.</p>
+            <p>
+            E desta maneira, assumo toda a responsabilidade durante o tratamento da solicitação, como: EMANUEL, (CONTRATANTE).</p>
+            <p>
+            Campinas, 21/02/2024</p>
+            <p>
+            _______________________________________
+            Assinatura do responsável
+        </p>
+        </p>
+    </div>
+
+</body>
+</html>
