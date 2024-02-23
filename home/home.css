@@ -63,15 +63,15 @@ body .container{
     max-width: 70%;
     height: 100vh;
     margin: auto;
+    padding: 7%;
     text-align: center;
     background: #f3f3f3
 }
-.container #dados-cliente {
-    display: block;
-    justify-content: left;
-    align-items:flex-start;
-
-    flex-wrap: wrap;
+.container #dados-cliente { background-color: rebeccapurple;
+    display: flex;
+    justify-content:center;
+    flex-direction: column;
     text-align: left;
+    padding: 15px;
 
 }
