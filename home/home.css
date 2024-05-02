@@ -34,16 +34,14 @@ header .logotipo h3{
     font-size: 1.2rem;
     font-weight: 300;
 }
-header nav {
-    background-color: rgba(127, 255, 212, 0);
+header nav {background-color: rgba(127, 255, 212, 0);
     display: flex;
     justify-content: right;
     align-items: center;
     width: 50%;
     height: 70px;
 }
-header nav a{
-    background-color: rgb(165, 165, 165);
+header nav a{background-color: rgb(165, 165, 165);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -70,8 +68,8 @@ body .container{
 .container #dados-cliente { background-color: rebeccapurple;
     display: flex;
     justify-content:center;
+    align-items: center;
     flex-direction: column;
-    text-align: left;
     padding: 15px;
 
 }
